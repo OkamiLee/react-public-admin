@@ -8,14 +8,14 @@ import React, {Component} from 'react';
 import echarts from 'ECharts';
 import geoJson from './data/heilongjiang.json';
 import option from "./data/option";
-
+import h from './data/haerbin'
 class MapChart extends Component {
   option = option;
   componentDidMount() {
     this.initECharts();
   }
   initECharts() {
-    echarts.registerMap('heilongjiang', geoJson);
+    echarts.registerMap('city', h );
     //初始化ECharts实例
     const myChart = echarts.init(document.getElementById('mainMap'));
     myChart.setOption(this.option);

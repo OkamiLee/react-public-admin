@@ -16,7 +16,7 @@ const options =  {
 		}
 	},
 	geo: {
-		map: 'heilongjiang',
+		map: 'city',
 		roam: false,
 		zoom: 1,
 		label: {
@@ -35,7 +35,7 @@ const options =  {
 	series: [
 		{
 			type: 'map',
-			mapType: 'heilongjiang',
+			mapType: 'city',
 			geoIndex:0,
 		},
 		{

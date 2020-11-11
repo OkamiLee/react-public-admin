@@ -8,6 +8,7 @@ import wrapAnimation from '@/utils/wrapAnimation'
 import BarChart from '@/components/barChart/barChart.jsx'
 import LineChart from '@/components/LineChart/lineChart.jsx'
 import MapChart from "@/components/mapChart/mapChart.jsx";
+import Roll from "./roll";
 import './style/style.less'
 import {  CommentOutlined } from '@ant-design/icons';
 class Home extends Component {
@@ -32,7 +33,8 @@ class Home extends Component {
         </li>
       </ul>
       <div className={'chart-box'}>
-        <BarChart/>
+        {/*<BarChart/>*/}
+        <Roll/>
         <LineChart/>
         <MapChart/>
       </div>

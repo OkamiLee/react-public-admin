@@ -17,13 +17,15 @@ class Login extends Component {
   state = {
     btnLoading:false
   };
+
   onFinish = params => {
     this.setState({
       btnLoading:true
     });
     const token = 'test';
-    sessionStorage.setItem('token',token);
-    this.props.setToken(token);
+    const type = this.props.match.params.type;
+    sessionStorage.setItem(type==='admin'?'adminToken':'webToken',token);
+    this.props.setToken(type==='admin'?'admin':'web',token);
     this.msg();
    /* axios.post('/login',params).then(res => {
       if (res.status === 200){
@@ -45,7 +47,6 @@ class Login extends Component {
     store.subscribe(()=>{
       console.log(store.getState())
     })
-    console.log(process.env.PUBLIC_URL)
     console.log(this.refs.loginForm.getFieldValue('username'))
   }
 
@@ -63,7 +64,12 @@ class Login extends Component {
       this.setState({
         btnLoading:true
       });
-      this.props.history.push('/admin/home');
+      alert(this.props.match.params.type==='web')
+      if (this.props.match.params.type==='admin'){
+        this.props.history.push('/admin/home');
+      }else if(this.props.match.params.type==='web'){
+        this.props.history.push('/web/home');
+      }
     })
   };
   render() {
@@ -106,10 +112,9 @@ class Login extends Component {
 }
 const dispatchToProp = (dispatch) => {
   return {
-    setToken:(data)=>{
+    setToken:(type, data)=>{
       dispatch({
-        type:'token',
-        data: data
+        type, data
       })
     }
   }

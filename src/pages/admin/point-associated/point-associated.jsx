@@ -6,7 +6,7 @@
 import React, {Component} from 'react';
 import wrapAnimation from "@/utils/wrapAnimation";
 import TheTable from '@/components/TheTable/TheTable'
-import { Form, Input, Button, Space, Pagination, Popconfirm, Select } from 'antd';
+import { Form, Input, Button, Space, Pagination, Popconfirm, Select, message } from 'antd';
 /*import $ from '@/api/axios'*/
 
 class PointAssociated extends Component {
@@ -16,15 +16,14 @@ class PointAssociated extends Component {
     detailStatus: false,
     detailData:{},
     loading:true,
+    selectedRowKeys:[],
     page: {
       pageSize: 10,
       pageNumber: 1
     }
   };
   componentDidMount() {
-    setTimeout(()=>{
-      this.getData({...this.state.page});
-    },2000)
+    this.getData({...this.state.page});
   }
 
   getData = (data) => {
@@ -53,12 +52,25 @@ class PointAssociated extends Component {
       detailStatus: false
     });
   };
+  onSelectChange = (selectedRowKeys)=>{
+    this.setState({ selectedRowKeys });
+  };
+  bulkOperations = () => {
+    if (this.state.selectedRowKeys.length<=0){
+      message.info({
+        content:'请至少选择一条数据',
+        style:{  marginTop: '50vh', }
+      });
+      return false;
+    }
+    //todo
+  };
   render() {
-    const {
-      tableData,
-      loading,
-      total
-    } = this.state;
+    const { tableData, loading, total, selectedRowKeys } = this.state;
+    const rowSelection = {
+      selectedRowKeys,
+      onChange: this.onSelectChange,
+    };
     const columns = [
       {
         title: '编号',
@@ -82,8 +94,6 @@ class PointAssociated extends Component {
         width:200,
         render: (e) => (
           <Space size="middle">
-            <Button type="primary" onClick={()=>this.check(e)} size={'small'}> 查看 </Button>
-            <Button type="primary" onClick={()=>this.check(e)} size={'small'}> 编辑 </Button>
             <Popconfirm
               title={`确定要${e.status}该测点吗？`}
               onConfirm={this.confirm}
@@ -105,20 +115,20 @@ class PointAssociated extends Component {
             <Input placeholder='请输入测点编号' />
           </Form.Item>
           <Form.Item name="baseInfoId" label="关联状态" >
-            <Select placeholder='请选择关联状态'>
+            <Select className='selectWidth' placeholder='请选择关联状态'>
               <Select.Option value=''>全部</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item>
             <Space>
               <Button type="primary" htmlType="submit" >查询</Button>
-              <Button type="primary" >新增</Button>
+              <Button type="primary" onClick={this.bulkOperations} >批量操作</Button>
             </Space>
           </Form.Item>
         </Form>
       </div>
       <div className={'table-box'}>
-        <TheTable loading={loading} tableData={tableData} columns={columns} />
+        <TheTable loading={loading} rowSelection={rowSelection} tableData={tableData} columns={columns} />
       </div>
       <div className='page-box'>
         <Pagination total={total} defaultCurrent={1} position={['bottomCenter','bottomCenter']} onChange={this.pageChange} />
@@ -128,13 +138,4 @@ class PointAssociated extends Component {
 }
 
 export default wrapAnimation(PointAssociated)
-const styleData = {
-  selectStyle:{
-    width:'170px'
-  },
-  searchStyle:{
-    padding:15,
-    backgroundColor:'#fff',
-    marginBottom:15
-  }
-};
+

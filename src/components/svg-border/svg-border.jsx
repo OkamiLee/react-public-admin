@@ -60,7 +60,7 @@ class Jsx extends Component {
           <animate attributeName="fill" values="#4fd2dd;#b2e7eb;transparent" dur="2s" begin="0s"  repeatCount={repeatCount}/>
         </polygon>
       </svg>
-      <div className="border-box-content">
+      <div className="border-box-content" style={{width:'100%',height:'100%'}}>
         {this.props.children}
       </div>
   </div>)

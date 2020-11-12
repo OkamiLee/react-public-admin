@@ -9,14 +9,14 @@ class App extends Component{
       console.log(store.getState())
     })
   }
-
   render() {
     return (
       <Router basename={'/platform'}>
         <Suspense fallback={<div/>}>
           <Switch>
-            <Route  path='/login' component={lazy(() => import('./login/login'))}/>
+            <Route  path='/login/:type' component={lazy(() => import('./login/login'))}/>
             <Route path='/admin' component={lazy(() => import('./layout/layout'))}/>
+            <Route path='/web' component={lazy(() => import('./web/home/home'))}/>
             <Redirect path="/" exact to="/admin/home" />
             <Route path='*' component={lazy(() => import('./error/error'))}/>
           </Switch>

@@ -15,7 +15,7 @@ class BlowerInfo extends Component {
   state = {
     tableData: [{key:1,status:1}],
     total: 0,
-    detailStatus: false,
+    dialogStatus: 0,
     detailData:{},
     loading:true,
     page: {
@@ -24,9 +24,7 @@ class BlowerInfo extends Component {
     }
   };
   componentDidMount() {
-    setTimeout(()=>{
-      this.getData({...this.state.page});
-    },2000)
+    this.getData({...this.state.page});
   }
 
   getData = (data) => {
@@ -34,9 +32,7 @@ class BlowerInfo extends Component {
       loading: false
     })
   };
-  getText = ()=>{
-    return 'Lee'
-  }
+
   onFinish = values => {
     const data = Object.assign(values, this.state.page);
     this.getData(data);
@@ -47,15 +43,33 @@ class BlowerInfo extends Component {
     });
     this.getData(this.state.page);
   };
+  add = ()=>{
+    this.setState({
+      dialogStatus: 1,
+      detailData: null
+    })
+  };
+  add = (data)=>{
+    this.setState({
+      dialogStatus: 1,
+      detailData: {status:1}
+    })
+  };
+  editor = (data)=>{
+    this.setState({
+      dialogStatus: 2,
+      detailData: data
+    })
+  };
   check = (data)=>{
     this.setState({
-      detailStatus: true,
+      dialogStatus: 3,
       detailData: data
     })
   };
   cancel = ()=>{
     this.setState({
-      detailStatus: false
+      dialogStatus: 0
     });
   };
   confirm = () =>{
@@ -64,7 +78,7 @@ class BlowerInfo extends Component {
   render() {
     const {
       tableData,
-      detailStatus,
+      dialogStatus,
       detailData,
       loading,
       total
@@ -97,7 +111,7 @@ class BlowerInfo extends Component {
         render: (e) => (
           <Space size="middle">
             <Button type="primary" onClick={()=>this.check(e)} size={'small'}> 查看 </Button>
-            <Button type="primary" onClick={()=>this.check(e)} size={'small'}> 编辑 </Button>
+            <Button type="primary" onClick={()=>this.editor(e)} size={'small'}> 编辑 </Button>
             <Popconfirm
               title={`确定要${e.status}该设备吗？`}
               onConfirm={this.confirm}
@@ -112,17 +126,21 @@ class BlowerInfo extends Component {
     return (<div className={'container'}>
       <div  className={'search-box'}>
         <Form name="horizontal_login" layout="inline" onFinish={this.onFinish}>
-          <Form.Item label={'风场名称'} name="companyName" >
-            <Input placeholder='请输入风场名称' />
+          <Form.Item label={'设备名称'} name="companyName" >
+            <Input placeholder='请输入设备名称' />
           </Form.Item>
-          <Form.Item label={'风机名称'} name="accountName" >
-            <Input placeholder='请输入风机名称' />
+          <Form.Item label={'风场名称'} name="accountName" >
+            <Select style={styleData.selectStyle} placeholder='请选择风场名称'>
+              <Select.Option value=''>全部</Select.Option>
+             </Select>
           </Form.Item>
           <Form.Item label={'设备型号'} name="accountName" >
-            <Input placeholder='请输入设备型号' />
+            <Select style={styleData.selectStyle} placeholder='请选择设备型号'>
+              <Select.Option value=''>全部</Select.Option>
+             </Select>
           </Form.Item>
-          <Form.Item label={'状态'} name="accountName" >
-            <Select style={styleData.selectStyle} placeholder='请选择状态'>
+          <Form.Item label={'停启状态'} name="accountName" >
+            <Select style={styleData.selectStyle} placeholder='请选择停启状态'>
               <Select.Option value=''>全部</Select.Option>
               <Select.Option value='1'>停用</Select.Option>
               <Select.Option value='2'>启用</Select.Option>
@@ -131,7 +149,7 @@ class BlowerInfo extends Component {
           <Form.Item>
             <Space>
               <Button type="primary" htmlType="submit" >查询</Button>
-              <Button type="primary" >新增</Button>
+              <Button type="primary" onClick={this.add} >新增</Button>
             </Space>
           </Form.Item>
         </Form>
@@ -142,8 +160,8 @@ class BlowerInfo extends Component {
       <div className='page-box'>
         <Pagination total={total} defaultCurrent={1} position={['bottomCenter','bottomCenter']} onChange={this.pageChange} />
       </div>
-      <Dialog title="风机信息" status={detailStatus} cancel={()=>this.setState({detailStatus: false})}>
-        <BlowerInfoDetail cancel={this.cancel} detailData={detailData} />
+      <Dialog title="风机信息" status={dialogStatus} cancel={()=>this.setState({dialogStatus: 0})}>
+        <BlowerInfoDetail cancel={this.cancel} dialogStatus={dialogStatus} detailData={detailData} />
       </Dialog>
     </div>)
   }

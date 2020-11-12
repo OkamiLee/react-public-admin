@@ -18,7 +18,7 @@ const options =  {
 	geo: {
 		map: 'city',
 		roam: false,
-		zoom: 1,
+		zoom: 1.2,
 		label: {
 			normal: {
 				show: false,//显示省份标签

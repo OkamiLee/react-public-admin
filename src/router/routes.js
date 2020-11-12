@@ -8,7 +8,7 @@ const routers =  [
   },
   {
     path:'/admin/BJ-area',
-    component:lazy(() => import('@/pages/admin/blower-judgment-area/blower-judgment-area')),
+    component:lazy(() => import('@/pages/admin/blower-judgment-area/wind-judgment-area')),
     auth:true
   },
   {
@@ -24,6 +24,11 @@ const routers =  [
   {
     path:'/admin/point-associated',
     component:lazy(() => import('@/pages/admin/point-associated/point-associated')),
+    auth:true
+  },
+  {
+    path:'/admin/warning-info',
+    component:lazy(() => import('@/pages/admin/warning-info/blower-warning-info')),
     auth:true
   },
 ];

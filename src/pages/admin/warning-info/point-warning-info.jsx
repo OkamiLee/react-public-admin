@@ -1,16 +1,16 @@
 /**
- * @name 风机判断区域-风机
+ * @name 告警信息-测点
  * @author 李万金
  * @date 2020年11月9日13:22:37
  * */
 import React, {Component} from 'react';
-import BJAreaDetail from "./components/detail";
+import WarningDetail from "./components/detail";
 import Dialog from "@/components/dialog/dialog";
 import TheTable from "@/components/TheTable/TheTable.jsx";
 import { Form, Input, Button, Space, Pagination, Select, Popconfirm } from 'antd';
 /*import $ from '@/api/axios'*/
 
-class BlowerJudgmentArea extends Component {
+class PointWarningInfo extends Component {
   state = {
     tableData: [{key:1,status:1}],
     total: 0,
@@ -40,18 +40,6 @@ class BlowerJudgmentArea extends Component {
     });
     this.getData(this.state.page);
   };
-  add = () => {
-    this.setState({
-      dialogStatus: 1,
-      detailData: {status:1}
-    })
-  };
-  editor = (data) => {
-    this.setState({
-      dialogStatus: 2,
-      detailData: data
-    })
-  };
   check = (data) => {
     this.setState({
       dialogStatus: 3,
@@ -59,7 +47,7 @@ class BlowerJudgmentArea extends Component {
     })
   };
   confirm = ()=>{
-
+    
   };
   cancel = ()=>{
     this.setState({
@@ -102,32 +90,22 @@ class BlowerJudgmentArea extends Component {
       {
         title: '操作',
         width:100,
-        render: (e) => (
-          <Space size="middle">
-            <Button type="primary" onClick={()=>this.check(e)} size={'small'}> 查看 </Button>
-            <Button type="primary" onClick={()=>this.editor(e)} size={'small'}> 编辑 </Button>
-            <Popconfirm
-              title={`确定要${e.status}该设备吗？`}
-              onConfirm={this.confirm}
-              okText="确定"
-              cancelText="取消">
-              <Button type="primary"  size={'small'}> 停用 </Button>
-            </Popconfirm>
-          </Space>
-        )
+        render: (e) => (<Button type="primary" onClick={()=>this.check(e)} size={'small'}> 查看 </Button>)
       },
     ];
     return (<div className={'container'} style={{height:550}}>
       <div  className={'search-box'}>
         <Form name="horizontal_login" layout="inline" onFinish={this.onFinish}>
-          <Form.Item label={'关联名称'} name="companyName" >
-            <Input placeholder='请输入关联名称' />
+          <Form.Item label={'告警测点名称'} name="companyName" >
+            <Input placeholder='请输入告警测点名称' />
           </Form.Item>
-          <Form.Item label={'风场编号'} name="accountName" >
-            <Input placeholder='请输入风场编号' />
+          <Form.Item label={'告警类型'} name="accountName" >
+            <Select  className='selectWidth' placeholder='请选择告警类型'>
+              <Select.Option value=''>全部</Select.Option>
+            </Select>
           </Form.Item>
-          <Form.Item label={'风场编号'} name="accountName" >
-            <Select style={styleData.selectStyle} placeholder='请选择停启状态'>
+          <Form.Item label={'请选择告警状态'} name="accountName" >
+            <Select  className='selectWidth' placeholder='请选择告警状态'>
               <Select.Option value=''>全部</Select.Option>
               <Select.Option value='1'>停用</Select.Option>
               <Select.Option value='2'>启用</Select.Option>
@@ -137,7 +115,6 @@ class BlowerJudgmentArea extends Component {
             {() => (
               <Space>
                 <Button type="primary" htmlType="submit" >查询</Button>
-                <Button type="primary" onClick={this.add} >新增</Button>
               </Space>
             )}
           </Form.Item>
@@ -149,21 +126,12 @@ class BlowerJudgmentArea extends Component {
       <div className='page-box'>
         <Pagination total={total} defaultCurrent={1} position={['bottomCenter','bottomCenter']} onChange={this.pageChange} />
       </div>
-      <Dialog title="风机判断区域-关联" status={dialogStatus>0} cancel={()=>this.setState({dialogStatus: false})}>
-        <BJAreaDetail cancel={this.cancel} dialogStatus={dialogStatus} detailData={detailData} />
+      <Dialog width={800} title="告警信息" status={dialogStatus>0} cancel={()=>this.setState({dialogStatus: false})}>
+        <WarningDetail cancel={this.cancel}  />
       </Dialog>
     </div>)
   }
 }
 
-export default BlowerJudgmentArea
-const styleData = {
-  selectStyle:{
-    width:'170px'
-  },
-  searchStyle:{
-    padding:15,
-    backgroundColor:'#fff',
-    marginBottom:15
-  }
-};
+export default PointWarningInfo
+

@@ -1,21 +1,22 @@
 /**
- * @name 风场信息
+ * @name 风机判断区域-风场
  * @author 李万金
- * @date 2020年11月9日13:22:45
+ * @date 2020年11月9日13:22:37
  * */
 import React, {Component} from 'react';
 import wrapAnimation from "@/utils/wrapAnimation";
-import WindInfoDetail from "./components/detail";
+import BJAreaDetail from "./components/detail";
 import Dialog from "@/components/dialog/dialog";
-import TheTable from '@/components/TheTable/TheTable'
+import TheTable from "@/components/TheTable/TheTable.jsx";
+import BJAreaList from './blower-judgment-area'
 import { Form, Input, Button, Space, Pagination  } from 'antd';
 /*import $ from '@/api/axios'*/
 
-class WindInfo extends Component {
+class BlowerJudgmentArea extends Component {
   state = {
-    tableData: [{key:1,status:1}],
+    tableData: [{key:1}],
     total: 0,
-    dialogStatus: 0,//0 不显示 1 新增 2编辑 3查看
+    detailStatus: false,
     detailData:{},
     loading:true,
     page: {
@@ -24,9 +25,7 @@ class WindInfo extends Component {
     }
   };
   componentDidMount() {
-    setTimeout(()=>{
-      this.getData({...this.state.page});
-    },2000)
+    this.getData({...this.state.page});
   }
 
   getData = (data) => {
@@ -34,6 +33,9 @@ class WindInfo extends Component {
       loading: false
     })
   };
+  getText = ()=>{
+    return 'Lee'
+  }
   onFinish = values => {
     const data = Object.assign(values, this.state.page);
     this.getData(data);
@@ -44,33 +46,21 @@ class WindInfo extends Component {
     });
     this.getData(this.state.page);
   };
-  add = ()=>{
-    this.setState({
-      dialogStatus: 1,
-      detailData: null
-    })
-  };
   check = (data)=>{
     this.setState({
-      dialogStatus: 3,
-      detailData: data
-    })
-  };
-  editor = (data)=>{
-    this.setState({
-      dialogStatus: 2,
+      detailStatus: true,
       detailData: data
     })
   };
   cancel = ()=>{
     this.setState({
-      dialogStatus: 0
+      detailStatus: false
     });
   };
   render() {
     const {
       tableData,
-      dialogStatus,
+      detailStatus,
       detailData,
       loading,
       total
@@ -82,16 +72,19 @@ class WindInfo extends Component {
       },
       {
         title: '风场编号',
-        dataIndex: 'companyType',
+        dataIndex: 'baseInfoId',
       },
       {
         title: '风场名称',
-        dataIndex: 'baseInfoId',
+        dataIndex: 'companyType',
       },
-
       {
         title: '风机数量',
         dataIndex: 'companyName',
+      },
+      {
+        title: '关联参考组数量',
+        dataIndex: 'unifiedIdentificationCode',
       },
       {
         title: '操作',
@@ -99,7 +92,6 @@ class WindInfo extends Component {
         render: (e) => (
           <Space size="middle">
             <Button type="primary" onClick={()=>this.check(e)} size={'small'}> 查看 </Button>
-            <Button type="primary" onClick={()=>this.editor(e)} size={'small'}> 编辑 </Button>
           </Space>
         )
       },
@@ -107,17 +99,16 @@ class WindInfo extends Component {
     return (<div className={'container'}>
       <div  className={'search-box'}>
         <Form name="horizontal_login" layout="inline" onFinish={this.onFinish}>
-          <Form.Item label={'风机编号'} name="accountName" >
-            <Input placeholder='请输入风机编号' />
+          <Form.Item label={'风场编号'} name="accountName" >
+            <Input placeholder='请输入风场编号' />
           </Form.Item>
           <Form.Item label={'风场名称'} name="companyName" >
             <Input placeholder='请输入风场名称' />
           </Form.Item>
-          <Form.Item>
-            <Space>
+          <Form.Item shouldUpdate={true}>
+            {() => (
               <Button type="primary" htmlType="submit" >查询</Button>
-              <Button type="primary" onClick={this.add} >新增</Button>
-            </Space>
+            )}
           </Form.Item>
         </Form>
       </div>
@@ -127,11 +118,11 @@ class WindInfo extends Component {
       <div className='page-box'>
         <Pagination total={total} defaultCurrent={1} position={['bottomCenter','bottomCenter']} onChange={this.pageChange} />
       </div>
-      <Dialog title="风场信息" status={dialogStatus>0} cancel={()=>this.setState({dialogStatus: 0})}>
-        <WindInfoDetail dialogStatus={dialogStatus} cancel={this.cancel} detailData={detailData} />
+      <Dialog width={1100} title="风机判断区域-风机" status={detailStatus} cancel={()=>this.setState({detailStatus: false})}>
+        <BJAreaList cancel={this.cancel} detailData={detailData} />
       </Dialog>
     </div>)
   }
 }
-export default wrapAnimation(WindInfo)
 
+export default wrapAnimation(BlowerJudgmentArea)

@@ -10,45 +10,44 @@ import { Form, Input, Button, Space  } from 'antd';
 class  WindInfoDetail extends Component {
   state = {
     defaultValue:null,
-    value:1
+    value:1,
+    status:false
   };
   componentDidMount() {
     this.setState({
-      defaultValue: this.props.detailData
+      defaultValue: this.props.detailData,
+      status: this.props.dialogStatus > 2
     });
   }
   onFinish = (params) => {
-    console.log(params)
     this.props.cancel();
   };
 
   render() {
-    const { defaultValue } = this.state;
+    const { defaultValue, status } = this.state;
     return (<div>
-      {
-        defaultValue?(
-          <Form name="nest-messages" labelCol={{ span: 4 }}  initialValues={defaultValue} onFinish={this.onFinish} >
-            <Form.Item label={'风场编号'} name="accountName" >
-              <Input placeholder='请输入风场编号' />
-            </Form.Item>
-            <Form.Item label={'风场名称'} name="accountName" >
-              <Input placeholder='请输入风场名称' />
-            </Form.Item>
-            <Form.Item label={'风场地址'} name="accountName" >
-              <Input placeholder='请输入风场地址' />
-            </Form.Item>
-            <Form.Item label={'风场简介'} name="accountName" >
-              <Input.TextArea maxLength={512} placeholder='请输入风场简介' />
-            </Form.Item>
-            <Form.Item className='textAlign' wrapperCol={{ span: 24 }}>
-              <Space>
-                <Button type="primary" htmlType="submit"> 保存 </Button>
-                <Button onClick={()=>this.props.cancel()} > 关闭 </Button>
-              </Space>
-            </Form.Item>
-          </Form>
-        ):null
-      }
+      <Form name="nest-messages" labelCol={{ span: 4 }}  initialValues={defaultValue} onFinish={this.onFinish} >
+        <Form.Item label={'风场编号'} name="accountName" >
+          <Input placeholder='请输入风场编号' disabled={status} />
+        </Form.Item>
+        <Form.Item label={'风场名称'} name="accountName" >
+          <Input placeholder='请输入风场名称' disabled={status} />
+        </Form.Item>
+        <Form.Item label={'风场地址'} name="companyName" >
+          <Input placeholder='请输入风场地址' disabled={status} />
+        </Form.Item>
+        <Form.Item label={'风场简介'} name="companyName" >
+          <Input.TextArea maxLength={512}  disabled={status} placeholder='请输入风场简介' />
+        </Form.Item>
+        <Form.Item className='textAlign' wrapperCol={{ span: 24 }}>
+          <Space>
+            {
+              !status?<Button type="primary"  htmlType="submit"> 保存 </Button>:null
+            }
+            <Button onClick={()=>this.props.cancel()} > 关闭 </Button>
+          </Space>
+        </Form.Item>
+      </Form>
     </div>)
   }
 }

@@ -1,11 +1,11 @@
 const tokenReducer = (state = null, action)=>{
   switch (action.type) {
-    case 'send_type':
-      return action.data;
-    case 'token':
-      return action.data;
+    case 'web':
+      return {type:'web',value:action.data};
+    case 'admin':
+      return {type:'admin',value:action.data};
     default:
-      return state;
+      return {type:'admin',value:action.data};
   }
 };
 const menuReducer = (state = null, action)=>{

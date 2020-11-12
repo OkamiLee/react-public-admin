@@ -15,7 +15,7 @@ import {
   ExclamationCircleOutlined
 } from '@ant-design/icons';
 import './style/style.less'
-const { Header, Sider, Content, Footer } = Layout;
+const { Header, Sider, Content } = Layout;
 const { confirm } = Modal;
 class Layouts extends Component {
   state = {
@@ -24,8 +24,8 @@ class Layouts extends Component {
   };
   componentDidMount() {
     const token = store.getState().token;
-    if (!token && !sessionStorage.getItem('token')){
-      this.props.history.push('/login');
+    if (token.type !== 'admin' && !sessionStorage.getItem('token')){
+      this.props.history.push('/login/admin');
     }
   }
 
@@ -130,7 +130,7 @@ class Layouts extends Component {
               </Switch>
             </Suspense>
           </Content>
-          <Footer style={{ textAlign: 'center' }}> 备案信息</Footer>
+          {/*<Footer style={{ textAlign: 'center' }}> 备案信息</Footer>*/}
         </Layout>
         <Dialog title="修改密码" status={ visible } cancel={()=>this.handleCancel()} >
           <ChangePass cancel={this.handleCancel} />
